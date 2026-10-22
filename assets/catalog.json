@@ -1,0 +1,418 @@
+{
+  "version": 1,
+  "canvas": [
+    384,
+    512
+  ],
+  "states": {
+    "idle": {
+      "variants": {
+        "default": {
+          "files": [
+            "full-frame-blink-v2/0.png",
+            "full-frame-blink-v2/1.png",
+            "full-frame-blink-v2/2.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 3200
+            },
+            {
+              "frame": 1,
+              "durationMs": 90
+            },
+            {
+              "frame": 2,
+              "durationMs": 140
+            },
+            {
+              "frame": 1,
+              "durationMs": 90
+            },
+            {
+              "frame": 0,
+              "durationMs": 1400
+            }
+          ],
+          "loop": true
+        }
+      }
+    },
+    "connecting": {
+      "variants": {
+        "default": {
+          "files": [
+            "full-frame-connecting-v1/0.png",
+            "full-frame-connecting-v1/1.png",
+            "full-frame-connecting-v1/2.png",
+            "full-frame-connecting-v1/3.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 350
+            },
+            {
+              "frame": 1,
+              "durationMs": 180
+            },
+            {
+              "frame": 2,
+              "durationMs": 420
+            },
+            {
+              "frame": 1,
+              "durationMs": 170
+            },
+            {
+              "frame": 3,
+              "durationMs": 180
+            },
+            {
+              "frame": 0,
+              "durationMs": 250
+            }
+          ],
+          "loop": true
+        }
+      }
+    },
+    "working": {
+      "variants": {
+        "default": {
+          "files": [
+            "working/t0.png",
+            "working/t1.png",
+            "working/t2.png",
+            "working/t3.png",
+            "working/t4.png",
+            "working/t5.png",
+            "working/t6.png",
+            "working/t7.png",
+            "working/w0.png",
+            "working/w1.png",
+            "working/w2.png",
+            "working/w3.png",
+            "working/w4.png",
+            "working/w5.png",
+            "working/w6.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 2200
+            },
+            {
+              "frame": 0,
+              "durationMs": 150
+            },
+            {
+              "frame": 1,
+              "durationMs": 140
+            },
+            {
+              "frame": 2,
+              "durationMs": 140
+            },
+            {
+              "frame": 3,
+              "durationMs": 170
+            },
+            {
+              "frame": 4,
+              "durationMs": 180
+            },
+            {
+              "frame": 5,
+              "durationMs": 190
+            },
+            {
+              "frame": 6,
+              "durationMs": 190
+            },
+            {
+              "frame": 7,
+              "durationMs": 240
+            },
+            {
+              "frame": 8,
+              "durationMs": 200
+            },
+            {
+              "frame": 9,
+              "durationMs": 200
+            },
+            {
+              "frame": 10,
+              "durationMs": 220
+            },
+            {
+              "frame": 11,
+              "durationMs": 220
+            },
+            {
+              "frame": 10,
+              "durationMs": 180
+            },
+            {
+              "frame": 11,
+              "durationMs": 180
+            },
+            {
+              "frame": 12,
+              "durationMs": 240
+            },
+            {
+              "frame": 13,
+              "durationMs": 260
+            },
+            {
+              "frame": 14,
+              "durationMs": 240
+            },
+            {
+              "frame": 10,
+              "durationMs": 220
+            },
+            {
+              "frame": 12,
+              "durationMs": 240
+            },
+            {
+              "frame": 8,
+              "durationMs": 300
+            },
+            {
+              "frame": 7,
+              "durationMs": 700
+            }
+          ],
+          "loop": true
+        }
+      }
+    },
+    "waiting": {
+      "variants": {
+        "default": {
+          "files": [
+            "waiting/w0.png",
+            "waiting/w1.png",
+            "waiting/w2.png",
+            "waiting/w3.png",
+            "waiting/w4.png",
+            "waiting/w5.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 1100
+            },
+            {
+              "frame": 1,
+              "durationMs": 240
+            },
+            {
+              "frame": 2,
+              "durationMs": 260
+            },
+            {
+              "frame": 3,
+              "durationMs": 1000
+            },
+            {
+              "frame": 4,
+              "durationMs": 280
+            },
+            {
+              "frame": 5,
+              "durationMs": 1120
+            }
+          ],
+          "loop": true
+        }
+      }
+    },
+    "error": {
+      "variants": {
+        "default": {
+          "files": [
+            "error/w0.png",
+            "error/w1.png",
+            "error/w2.png",
+            "error/w3.png",
+            "error/w4.png",
+            "error/w5.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 850
+            },
+            {
+              "frame": 1,
+              "durationMs": 400
+            },
+            {
+              "frame": 2,
+              "durationMs": 320
+            },
+            {
+              "frame": 3,
+              "durationMs": 1250
+            },
+            {
+              "frame": 4,
+              "durationMs": 400
+            },
+            {
+              "frame": 5,
+              "durationMs": 1130
+            }
+          ],
+          "loop": true,
+          "effect": {
+            "kind": "questions",
+            "frames": [
+              3
+            ],
+            "staggerMs": 180
+          }
+        }
+      }
+    },
+    "offline": {
+      "variants": {
+        "default": {
+          "files": [
+            "offline/w0.png",
+            "offline/w1.png",
+            "offline/w2.png",
+            "offline/w3.png",
+            "offline/w4.png",
+            "offline/w5.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 1000
+            },
+            {
+              "frame": 1,
+              "durationMs": 600
+            },
+            {
+              "frame": 2,
+              "durationMs": 800
+            },
+            {
+              "frame": 3,
+              "durationMs": 1600
+            },
+            {
+              "frame": 4,
+              "durationMs": 800
+            },
+            {
+              "frame": 5,
+              "durationMs": 1200
+            }
+          ],
+          "loop": true,
+          "effect": {
+            "kind": "sleep",
+            "frames": [
+              2,
+              3
+            ],
+            "staggerMs": 240
+          }
+        }
+      }
+    },
+    "complete": {
+      "selection": "uniform-on-entry",
+      "variants": {
+        "victory": {
+          "files": [
+            "complete-victory/w0.png",
+            "complete-victory/w1.png",
+            "complete-victory/w2.png",
+            "complete-victory/w3.png",
+            "complete-victory/w4.png",
+            "complete-victory/w5.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 900
+            },
+            {
+              "frame": 1,
+              "durationMs": 260
+            },
+            {
+              "frame": 2,
+              "durationMs": 300
+            },
+            {
+              "frame": 3,
+              "durationMs": 1000
+            },
+            {
+              "frame": 4,
+              "durationMs": 300
+            },
+            {
+              "frame": 5,
+              "durationMs": 1240
+            }
+          ],
+          "loop": false
+        },
+        "sign": {
+          "files": [
+            "complete-sign/w0.png",
+            "complete-sign/w1.png",
+            "complete-sign/w2.png",
+            "complete-sign/w3.png",
+            "complete-sign/w4.png",
+            "complete-sign/w5.png"
+          ],
+          "sequence": [
+            {
+              "frame": 0,
+              "durationMs": 900
+            },
+            {
+              "frame": 1,
+              "durationMs": 260
+            },
+            {
+              "frame": 2,
+              "durationMs": 300
+            },
+            {
+              "frame": 3,
+              "durationMs": 1000
+            },
+            {
+              "frame": 4,
+              "durationMs": 300
+            },
+            {
+              "frame": 5,
+              "durationMs": 1240
+            }
+          ],
+          "loop": false
+        }
+      }
+    }
+  },
+  "character": {
+    "id": "book-companion",
+    "name": "Book Companion",
+    "description": "The included orange-haired pixel character. Other compatible character packs can be loaded with assetsUrl."
+  }
+}
