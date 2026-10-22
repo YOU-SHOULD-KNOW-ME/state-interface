@@ -32,7 +32,9 @@ async function loadAssets(base) {
     }
     async function preload(){
       const queue=[...files];
-      await Promise.all(Array.from({length:3},async()=>{while(queue.length)await ensure(queue.shift())}));
+      const failures=[];
+      await Promise.all(Array.from({length:3},async()=>{while(queue.length){try{await ensure(queue.shift())}catch(error){failures.push(error)}}}));
+      if(failures.length)throw new AggregateError(failures,'Some character frames failed to load');
     }
     return {catalog,images,ensure,preload};
   })().catch(error=>{cache.delete(base.href);throw error});
@@ -63,11 +65,11 @@ export async function createCompanion({container,canvas,assetsUrl=new URL('../as
   const character=catalog.character?.name||'Character';
   const context=canvas.getContext('2d');
   const media=matchMedia('(prefers-reduced-motion: reduce)');
-  let playback=selectPlayback(catalog,initialState,{variant,random}),time=0,playing=autoplay,rate=1,last=0,raf=0,destroyed=false,loading=false;
+  let playback=selectPlayback(catalog,initialState,{variant,random}),time=0,playing=autoplay,rate=1,last=0,raf=0,destroyed=false,loading=false,loadError=null;
   await Promise.all(playback.files.map(ensure));
 
   function render() {
-    if(destroyed)return;
+    if(destroyed||loading||loadError)return;
     const sample=frameAt(playback,time);
     // Keep the last complete frame visible until the next state is ready.
     if(!images[playback.files[sample.frame]])return;
@@ -88,19 +90,19 @@ export async function createCompanion({container,canvas,assetsUrl=new URL('../as
     canvas.dataset.state=playback.state;canvas.dataset.variant=playback.variant;canvas.dataset.frame=String(sample.frame);
     canvas.setAttribute('aria-label',character+': '+playback.state+' ('+playback.variant+')');
   }
-  function schedule(){if(!destroyed&&playing&&!document.hidden&&!(respectReducedMotion&&media.matches)&&!raf)raf=requestAnimationFrame(tick)}
-  function tick(now){raf=0;if(last&&!loading)time+=Math.min(100,now-last)*rate;last=now;render();schedule()}
+  function schedule(){if(!destroyed&&!loading&&!loadError&&playing&&!document.hidden&&!(respectReducedMotion&&media.matches)&&!raf)raf=requestAnimationFrame(tick)}
+  function tick(now){raf=0;if(last&&!loading&&!loadError)time+=Math.min(100,now-last)*rate;last=now;render();schedule()}
   function pause(){playing=false;last=0;cancelAnimationFrame(raf);raf=0;return controller}
   function play(){playing=true;last=0;schedule();return controller}
   function seek(value){if(!Number.isFinite(value)||value<0)throw new RangeError('seek requires non-negative milliseconds');time=value;render();return controller}
   function setState(state,options={}){
     if(destroyed)throw Error('Companion was destroyed');
     const requestedVariant=options.variant??'random';
-    if(state===playback.state&&!options.restart&&(requestedVariant==='random'||requestedVariant===playback.variant))return controller;
-    playback=selectPlayback(catalog,state,{variant:requestedVariant,random});time=0;last=0;
+    if(state===playback.state&&!loadError&&!options.restart&&(requestedVariant==='random'||requestedVariant===playback.variant))return controller;
+    playback=selectPlayback(catalog,state,{variant:requestedVariant,random});time=0;last=0;loadError=null;
     loading=playback.files.some(file=>!images[file]);if(!loading)render();
     const selected=playback;
-    if(loading)Promise.all(playback.files.map(ensure)).then(()=>{if(playback===selected&&!destroyed){loading=false;last=0;render()}}).catch(error=>{if(!destroyed)onError(error)});
+    if(loading)Promise.all(playback.files.map(ensure)).then(()=>{if(playback===selected&&!destroyed){loading=false;last=0;render();schedule()}}).catch(error=>{if(playback===selected&&!destroyed){loading=false;loadError=error.message;onError(error)}});
     onStateChange?.({state:playback.state,variant:playback.variant});schedule();return controller;
   }
   function visibility(){cancelAnimationFrame(raf);raf=0;last=0;schedule()}
@@ -108,7 +110,7 @@ export async function createCompanion({container,canvas,assetsUrl=new URL('../as
   document.addEventListener('visibilitychange',visibility);media.addEventListener('change',motion);
   const controller={canvas,setState,seek,renderAt:seek,pause,play,preload,
     setSpeed(value){if(!Number.isFinite(value)||value<=0)throw new RangeError('Speed must be positive');rate=value;return controller},
-    getSnapshot(){return {state:playback.state,variant:playback.variant,timeMs:time,durationMs:playback.durationMs,frame:frameAt(playback,time).frame,playing,loading}},
+    getSnapshot(){return {state:playback.state,variant:playback.variant,timeMs:time,durationMs:playback.durationMs,frame:frameAt(playback,time).frame,playing,loading,loadError,loadedFrames:playback.files.filter(file=>images[file]).length,totalFrames:playback.files.length}},
     destroy(){if(destroyed)return;pause();destroyed=true;document.removeEventListener('visibilitychange',visibility);media.removeEventListener('change',motion);if(owned)canvas.remove()}
   };
   render();schedule();preload().catch(onError);return controller;

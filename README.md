@@ -90,3 +90,5 @@ Source: [state-interface](https://github.com/YOU-SHOULD-KNOW-ME/state-interface)
 Code is MIT licensed. Read `ASSETS.md` for illustration provenance and trademark scope. Slight hair/clothing differences remain between generated keyframes, matching the approved source animations.
 
 The initial state loads first; other frames preload in the background with bounded concurrency. On an uncached state, the previous full frame stays visible and the timeline waits until that state is ready. `getSnapshot().loading` reports this wait. Image loads have a timeout and one retry. Use `onError` for host error UI and `await actor.preload()` before deterministic multi-state rendering.
+
+Load status is available in `getSnapshot()`: `loadedFrames`, `totalFrames`, and `loadError`. A failed state clears `loading` and freezes its timeline; call `setState` again to retry. Background preloading continues past individual failed frames. The playground shows download progress and a Retry action.
