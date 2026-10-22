@@ -6,7 +6,7 @@ for(const [state,[icon,name]] of Object.entries(states)){
  const b=document.createElement('button');b.type='button';b.dataset.state=state;b.setAttribute('aria-pressed',String(state==='idle'));b.innerHTML=`<b aria-hidden="true">${icon}</b><span>${name}</span>`;b.disabled=true;b.onclick=()=>choose(state);$('states').append(b);
 }
 function choose(state){actor.setState(state,{restart:true,variant:state==='complete'?$('variant').value:'random'});$('state-name').textContent=states[state][1];$('state-description').textContent=states[state][2];document.querySelectorAll('.states button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.state===state)));update()}
-function update(){if(!actor)return;const s=actor.getSnapshot();$('play').textContent=s.playing?'Pause':'Play';$('seek').max=s.durationMs-1;$('seek').value=s.state==='complete'?Math.min(s.durationMs-1,s.timeMs):s.timeMs%s.durationMs;$('time').value=`${(Number($('seek').value)/1000).toFixed(1)} / ${(s.durationMs/1000).toFixed(1)} s`;$('status').textContent=s.playing?'● Playing':'Ⅱ Paused'}
+function update(){if(!actor)return;const s=actor.getSnapshot();$('play').textContent=s.playing?'Pause':'Play';$('seek').max=s.durationMs-1;$('seek').value=s.state==='complete'?Math.min(s.durationMs-1,s.timeMs):s.timeMs%s.durationMs;$('time').value=`${(Number($('seek').value)/1000).toFixed(1)} / ${(s.durationMs/1000).toFixed(1)} s`;$('status').textContent=s.loading?'Loading state…':s.playing?'● Playing':'Ⅱ Paused'}
 $('snippet').textContent=`import { createStateInterface } from './src/index.js';
 
 const actor = await createStateInterface({

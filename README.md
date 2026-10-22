@@ -50,11 +50,12 @@ All 52 PNGs are complete character frames, with a shared 384x512 canvas and regi
 
 ## API
 
-- `createStateInterface({canvas | container, assetsUrl?, initialState?, variant?, autoplay?, respectReducedMotion?, random?, onStateChange?}) -> Promise<controller>`
+- `createStateInterface({canvas | container, assetsUrl?, initialState?, variant?, autoplay?, respectReducedMotion?, random?, onStateChange?, onError?}) -> Promise<controller>`
 - `setState(state, {restart?: boolean, variant?: 'random' | 'default' | 'victory' | 'sign'})`
 - `pause()`, `play()`, `setSpeed(multiplier)`
+- `await preload()` loads all pack frames; useful before film rendering.
 - `seek(milliseconds)` / `renderAt(milliseconds)`
-- `getSnapshot()` returns state, chosen variant, elapsed time, duration, current frame and playing flag.
+- `getSnapshot()` returns state, chosen variant, elapsed time, duration, current frame, playing flag and loading flag.
 - `destroy()` cancels scheduling and removes listeners. It removes only a canvas it created itself.
 - `controller.canvas` is the rendered output, including decorative question marks and ZZZ.
 
@@ -64,6 +65,7 @@ All 52 PNGs are complete character frames, with a shared 384x512 canvas and regi
 
 ```js
 const actor = await createStateInterface({ canvas, autoplay: false, respectReducedMotion: false });
+await actor.preload(); // Load every frame before deterministic scene rendering.
 actor.setState('complete', { variant: 'sign', restart: true });
 actor.renderAt(1600);
 ```
@@ -86,3 +88,5 @@ status.setActivity({ state: 'working', observedAt: Date.now() / 1000 });
 Source: [state-interface](https://github.com/YOU-SHOULD-KNOW-ME/state-interface). The package is not published on npm. Clone or download the repository to use it. Run `node --test tests/*.test.mjs` to check timeline and adapter semantics. See `docs/INTEGRATION.md` and `docs/RELEASE.md` before publishing.
 
 Code is MIT licensed. Read `ASSETS.md` for illustration provenance and trademark scope. Slight hair/clothing differences remain between generated keyframes, matching the approved source animations.
+
+The initial state loads first; other frames preload in the background with bounded concurrency. On an uncached state, the previous full frame stays visible and the timeline waits until that state is ready. `getSnapshot().loading` reports this wait. Image loads have a timeout and one retry. Use `onError` for host error UI and `await actor.preload()` before deterministic multi-state rendering.
